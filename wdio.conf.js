@@ -1,4 +1,10 @@
 export const config = {
+    before: async () => {
+        await import('expect-webdriverio');
+        global.wdioExpect = global.expect;
+        const chai = await import('chai');
+        global.expect = chai.expect;
+    },
     //
     // ====================
     // Runner Configuration
@@ -56,7 +62,7 @@ export const config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    maxInstances: 10,
+    maxInstances: 1,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -69,7 +75,7 @@ export const config = {
         "appium:appPackage": "com.goya.icare",
         "appium:appActivity": "com.goya.icare.MainActivity",
         "appium:udid": "emulator-5554",
-        "appium:noReset": true
+        "appium:noReset": true,
     }],
 
     //
@@ -148,7 +154,15 @@ export const config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: [],
+    reporters: ['dot', 'mochawesome'],
+    mochawesomeOpts: {
+        includeScreenshots:true,
+        screenshotUseRelativePath:true
+    },
+    reporterOptions: {
+        outputDir: './', //json file will be written to this directory
+        mochawesome_filename: 'myfile.json' //will default to wdiomochawesome.json if no name is provided
+    },
 
     
     //
